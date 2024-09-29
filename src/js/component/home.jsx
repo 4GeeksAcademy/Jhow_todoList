@@ -1,26 +1,53 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+import React, { useState } from "react";
 
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+  const [inputValue, setInputValue] = useState("");
+  const [Tareas, setTareas] = useState([]);
+
+  return (
+    <div className="Container">
+      <h1>TODOS</h1>
+      <ul>
+        <li>
+          <input
+            type="text"
+            placeholder="Indica Nueva Tarea"
+            onChange={(Event) => setInputValue(Event.target.value)}
+            value={inputValue}
+            onKeyUp={(Event) => {
+              if (Event.key === "Enter") {
+                if (inputValue.trim() !== "") {  // Evita agregar tareas vacías
+                  setTareas([...Tareas, inputValue]);
+                  setInputValue("");
+                }
+              }
+            }}
+          ></input>
+        </li>
+
+        {/* Verifica si hay tareas */}
+        {Tareas.length === 0 ? (
+          <li className="no-tasks">No hay tareas, añadir tareas</li>
+        ) : (
+          Tareas.map((item, index) => (
+            <li key={index} className="task-item">
+              {item}
+              <button
+                className="delete-btn"
+                onClick={() =>
+                  setTareas(Tareas.filter((t, tindex) => index !== tindex))
+                }
+              >
+               🗑️
+              </button>
+            </li>
+          ))
+        )}
+      </ul>
+      <div>{Tareas.length} Tareas</div>
+    </div>
+  );
 };
 
 export default Home;
